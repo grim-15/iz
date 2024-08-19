@@ -3,3 +3,29 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+app_email_inbox:
+    path: /inbox
+    controller: App\Controller\EmailController::inbox
+
+app_delete_email:
+    path: /delete-email/{id}
+    controller: App\Controller\EmailController::deleteEmail
+    methods: [POST]
+
+app_reply_email:
+    path: /reply-email/{id}
+    controller: App\Controller\EmailController::replyEmail
+    methods: [GET, POST]
+
+email_inbox:
+    path: /boite-de-reception
+    controller: App\Controller\EmailController::inbox
+
+email_content:
+    path: /email/{id}
+    controller: App\Controller\EmailController::showEmailContent
+
+fetch_new_emails: 
+    path: /fetch-new-emails
+    controller: App\Controller\EmailController::fetchNewEmails

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Envoyer un Email</title>
+</head>
+<body>
+    <h1>Envoyer un Email</h1>
+
+    {{ form_start(emailForm) }}
+        {{ form_widget(emailForm) }}
+        <button type="submit">Envoyer</button>
+    {{ form_end(emailForm) }}
+
+    {% for message in app.flashes('success') %}
+        <div style="color: green; margin-top: 10px;">{{ message }}</div>
+    {% endfor %}
+
+    <a href="{{ path('app_home') }}">Retour à l'accueil</a>
+</body>
+</html>

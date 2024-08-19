@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Boîte de Réception</h1>
+
+    {% if emails is empty %}
+        <p>Aucun email trouvé.</p>
+    {% else %}
+        <ul id="email-list">
+            {% for email in emails %}
+                <li data-email-id="{{ email.id }}">
+                    <strong>De :</strong> {{ email.fromAddress }} <br>
+                    <strong>Sujet :</strong> {{ email.subject }} <br>
+                    <strong>Date :</strong> {{ email.date|date('d/m/Y H:i') }} <br>
+                    <a href="{{ path('email_content', { id: email.id }) }}">Voir le contenu</a>
+                    <br><br>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <script>
+        function fetchNewEmails() {
+            fetch('{{ path('fetch_new_emails') }}')
+                .then(response => response.json())
+                .then(emails => {
+                    const emailList = document.getElementById('email-list');
+                    emailList.innerHTML = '';
+                    emails.forEach(email => {
+                        const emailItem = document.createElement('li');
+                        emailItem.setAttribute('data-email-id', email.id);
+
+                        const emailDate = new Date(email.date);
+                        const formattedDate = emailDate.toLocaleString('fr-FR', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit',
+                        });
+
+                        emailItem.innerHTML = `
+                            <strong>De :</strong> ${email.fromAddress} <br>
+                            <strong>Sujet :</strong> ${email.subject} <br>
+                            <strong>Date :</strong> ${formattedDate} <br>
+                            <a href="{{ path('email_content', { id: '__ID__' }) }}">Voir le contenu</a>
+                            <br><br>
+                        `.replace('__ID__', email.id);
+                        emailList.appendChild(emailItem);
+                    });
+                })
+                .catch(error => console.error('Erreur lors de la récupération des nouveaux emails:', error));
+        }
+
+        setInterval(fetchNewEmails, 10000); //// toute les 10 secondes
+    </script>
+{% endblock %}

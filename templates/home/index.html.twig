@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Accueil - Coorty</title>
+    <style>
+        .contacts-list {
+            display: none; 
+        }
+    </style>
+</head>
+<body>
+    <h1>Bienvenue sur Coorty</h1>
+    <a href="{{ path('app_home') }}">Contacts</a>
+    <button onclick="window.location.href='{{ path('app_add_contact') }}'">Ajouter un Contact</button>
+    
+    <h2>Contacts</h2>
+    <button id="toggleContactsButton" onclick="toggleContacts()">Afficher Contacts</button>
+    
+    <ul id="contactsList" class="contacts-list">
+        {% for contact in contacts %}
+            <li>
+                {{ contact.nom }} {{ contact.prenom }} ({{ contact.email }})
+                <button onclick="window.location.href='{{ path('app_send_email', {'id': contact.id}) }}'">Envoyer un Email</button>
+                <form action="{{ path('app_delete_contact', {'id': contact.id}) }}" method="post" style="display:inline;">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce contact ?');">Supprimer</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <button onclick="window.location.href='{{ path('app_email_inbox') }}'">Boîte de réception</button>
+
+    <script>
+        function toggleContacts() {
+            var contactsList = document.getElementById('contactsList');
+            var toggleButton = document.getElementById('toggleContactsButton');
+
+            if (contactsList.style.display === 'none') {
+                contactsList.style.display = 'block';
+                toggleButton.textContent = 'Cacher Contacts';
+            } else {
+                contactsList.style.display = 'none';
+                toggleButton.textContent = 'Afficher Contacts';
+            }
+        }
+    </script>
+</body>
+</html>

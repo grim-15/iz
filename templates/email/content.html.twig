@@ -1,0 +1,17 @@
+{# templates/email/content.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Détails de l'Email</h1>
+
+    <p><strong>De :</strong> {{ email.fromAddress }}</p>
+    <p><strong>Sujet :</strong> {{ email.subject }}</p>
+    <p><strong>Date :</strong> {{ email.date|date('d/m/Y H:i') }}</p>
+    <div>
+        <strong>Contenu :</strong>
+        <div>{{ email.htmlContent|raw }}</div>
+    </div>
+
+    <a href="{{ path('email_inbox') }}">Retour à la boîte de réception</a>
+{% endblock %}
